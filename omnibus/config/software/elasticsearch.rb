@@ -17,11 +17,13 @@
 name "elasticsearch"
 default_version "6.8.1"
 
-dependency "server-jre"
+dependency "server-open-jre"
+#dependency "openjdk"
 
+# check that we build code under Apache licensces else delete those bits under differetn licenses
 license "Apache-2.0"
 license_file "LICENSE.txt"
-skip_transitive_dependency_licensing true
+skip_transitive_dependency_licensing true # check with this commented out what else is pulled in
 
 relative_path "elasticsearch-#{version}"
 
