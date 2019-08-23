@@ -9,4 +9,7 @@ build do
 
   # remove any test fixture pivotal keys to avoid user confusion
   command "find #{install_dir} -name pivotal.pem -delete"
+
+  # patchelf was only installed to change the rpath for adoptopenjre binary
+  command "find #{install_dir} -name patchelf -delete"
 end

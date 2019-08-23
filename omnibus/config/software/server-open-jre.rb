@@ -50,7 +50,6 @@ version "11" do
 end
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
   mkdir "#{install_dir}/embedded/open-jre"
   sync  "#{project_dir}/", "#{install_dir}/embedded/open-jre"
 
