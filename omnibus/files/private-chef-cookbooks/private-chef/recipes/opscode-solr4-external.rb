@@ -32,38 +32,35 @@ when 'elasticsearch'
                         'number_of_shards' => node['private_chef']['opscode-solr4']['elasticsearch_shard_count'],
                         'number_of_replicas' => node['private_chef']['opscode-solr4']['elasticsearch_replica_count'],
                       },
-                     'mappings' => {
-                        'object' => {
-                          '_source' => { 'enabled' => false },
-                          '_all' => { 'enabled' => false },
-                          'properties' => {
-                            'X_CHEF_database_CHEF_X' => { 'type' => 'string',
-                                                          'index' => 'not_analyzed',
-                                                          'norms' => {
-                                                            'enabled' => false,
-                                                          },
+                      "mappings" => {
+                        "object" => {
+                          "_source" => { "enabled" => false },
+                          "_all" => { "enabled" => false },
+                          "properties" => {
+                            "X_CHEF_database_CHEF_X" => { "type" => "keyword",
+                                                          "norms" => {
+                                                            "enabled" => false
+                                                          }
                                                         },
-                            'X_CHEF_type_CHEF_X' => { 'type' => 'string',
-                                                      'index' => 'not_analyzed',
-                                                      'norms' => {
-                                                        'enabled' => false,
-                                                      },
+                            "X_CHEF_type_CHEF_X" => { "type" => "keyword",
+                                                      "norms" => {
+                                                        "enabled" => false
+                                                      }
                                                     },
-                            'X_CHEF_id_CHEF_X' => { 'type' => 'string',
-                                                    'index' => 'not_analyzed',
-                                                    'norms' => {
-                                                      'enabled' => false,
-                                                    },
+                            "X_CHEF_id_CHEF_X" => { "type" => "keyword",
+                                                    "norms" => {
+                                                      "enabled" => false
+                                                    }
                                                   },
-                            'data_bag' => { 'type' => 'string',
-                                            'index' => 'not_analyzed',
-                                            'norms' => {
-                                              'enabled' => false,
-                                            },
+                            "data_bag" => { "type" => "keyword",
+                                            "norms" => {
+                                              "enabled" => false
+                                            }
                                           },
-                            'content' => { 'type' => 'string', 'index' => 'analyzed' },
-                          },
-                        },
-                      })
+                            "content" => { "type" => "text" }
+                          }
+                        }
+                      }
+                     })
   end
 end
