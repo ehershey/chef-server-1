@@ -103,8 +103,7 @@ class OmnibusHelper
         # Decorate any JSON parsing exception or numeric exceptions when accessing and parsing the version field.
         raise "Unable to parse elasticsearch response #{e}"
       end
-      raise "Unsupported elasticsearch version of #{version}. There is current support for the major versions of 2 and 5." if version != 5 && version != 2
-
+      raise "Unsupported elasticsearch version of #{version}. There is current support for the major versions of 2 and 5." if version !=6 && version != 5 && version != 2
       version
     else
       # Elasticsearch is disabled - this configuration setting should never be used in erlang.
