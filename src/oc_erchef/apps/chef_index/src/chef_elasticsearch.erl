@@ -33,6 +33,7 @@ update(Body) ->
                     {error, {solr_500, string()}}.
 search(#chef_solr_query{} = Query) ->
     Url = "/chef/_search",
+  %  ?debugFmt("Url:~p/n Query:~p/n", [Url, Query]),
     {ok, Code, _Head, Body} = chef_index_http:request(Url, get, query_body(Query), ?JSON_HEADER),
     case Code of
         "200" ->
@@ -87,8 +88,9 @@ query_body(#chef_solr_query{
 
 fields_tag() ->
     case envy:get(chef_index, solr_elasticsearch_major_version, 2, non_neg_integer) of
-        5 -> <<"stored_fields">>;
-        _ -> <<"fields">>
+        2 -> <<"fields">>;
+        X when X >= 5 -> <<"stored_fields">>;
+        _ -> <<"stored_fields">>
     end.
 
 query_string_query_ejson(QueryString) ->

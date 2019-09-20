@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 
+helper = OmnibusHelper.new(node)
 case node['private_chef']['opscode-erchef']['search_provider']
 when 'solr'
   Chef::Log.warn('External Solr Support does not include configuring the Solr schema.')
@@ -62,5 +63,6 @@ when 'elasticsearch'
                         }
                       }
                      })
+    index_definition(helper.create_elasticsearch_index)
   end
 end

@@ -122,22 +122,23 @@ end
 include_recipe 'private-chef::fix_permissions'
 
 # Configure Services
-%w(
-  postgresql
-  oc_bifrost
-  oc_id
-  opscode-solr4
-  opscode-expander
-  bookshelf
-  opscode-erchef
-  bootstrap
-  opscode-chef-mover
-  redis_lb
-  nginx
-  rabbitmq
-  elasticsearch
-).each do |service|
-  if node['private_chef'][service]['external']
+[
+  "postgresql",
+  "oc_bifrost",
+  "oc_id",
+  "elasticsearch",
+  "opscode-solr4",
+  "opscode-expander",
+  "bookshelf",
+  "opscode-erchef",
+  "bootstrap",
+  "opscode-chef-mover",
+  "redis_lb",
+  "nginx",
+  "rabbitmq",
+  "elasticsearch"
+].each do |service|
+  if node["private_chef"][service]["external"]
     begin
       # Perform any necessary configuration of the external service:
       include_recipe "private-chef::#{service}-external"
