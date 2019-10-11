@@ -11,6 +11,45 @@ function error_exit
 	exit 1
 }
 
+version=$(awk '/chef-server/{ split($2,a,"+");print a[1];exit }' /opt/opscode/version-manifest.txt)
+
+confirm () {
+  read -r -p "Do you want to continue [y/n]" response
+  case "$response" in
+        [yY][eE][sS]|[yY])
+            echo "Putting chef infra server in maint mode soetime in the future."
+            echo "create a /tmp/first_time_internal_elasticsearch_install"
+            touch /tmp/first_time_internal_elasticsearch_install
+            echo "for now continuing."
+            ;;
+        *)
+            echo "Please reinstall the older version again and reconfigure."
+            exit
+            ;;
+  esac
+}
+
+first_elasticsearch_internal_install () {
+  IFS=. read -r major minor patch <<< "$version"
+  # change minor to 1 when doing the actual promotion
+  if [ $major -ge 13 -a $minor -ge 0 ]; then
+    echo "Installing internal elasticsearch."
+    if [ -e /opt/opscode/sv/opscode-solr4 ]; then
+      echo "This install will replace solr with elasticsearch."
+      echo "The migration is a downtime operation."
+      echo "Please take a full backup before proceeding."
+      confirm
+    else
+      echo "sv solr4 does not exist you were already on elasticsearch for search. no reindex."
+    fi
+    else
+      echo "version is major: $major and minor: $minor and patch: $patch"
+      echo "search will still continue to use solr."
+  fi
+}
+
+first_elasticsearch_internal_install
+
 ln -sf /opt/opscode/bin/private-chef-ctl /usr/bin || error_exit "Cannot link private-chef-ctl in /usr/bin"
 ln -sf /opt/opscode/bin/chef-server-ctl /usr/bin || error_exit "Cannot link chef-server-ctl in /usr/bin"
 mkdir -p /var/opt/opscode/plugins
@@ -36,6 +75,10 @@ if [ -e /etc/opscode/chef-server-running.json ]; then
   echo
   echo -e "\033[1;31mchef-server-ctl upgrade\033[0m"
   echo
+  if [ -e /tmp/first_time_internal_elasticsearch_install  ]; then
+      echo "This will be a downtime operation. Upgrade will add indexes"
+      echo "to elasticsearch and solr will be unavailable to use even after upgrade."
+  fi
   echo "After the upgrade command completes, your Chef services will"
   echo "remain in a down state. To bring them back up run:"
   echo
