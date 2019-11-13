@@ -17,7 +17,7 @@ confirm () {
   read -r -p "Do you want to continue [y/n]" response
   case "$response" in
         [yY][eE][sS]|[yY])
-            echo "Putting chef infra server in maint mode soetime in the future."
+            echo "Putting chef infra server in maint mode sometime in the future."
             echo "create a /tmp/first_time_internal_elasticsearch_install"
             touch /tmp/first_time_internal_elasticsearch_install
             echo "for now continuing."
