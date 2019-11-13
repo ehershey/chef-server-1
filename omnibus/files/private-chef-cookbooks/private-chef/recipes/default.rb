@@ -46,21 +46,30 @@ directory '/etc/opscode/logrotate.d' do
   action :nothing
 end.run_action(:create)
 
-<<<<<<< HEAD
 include_recipe 'private-chef::plugin_discovery'
 include_recipe 'private-chef::plugin_config_extensions'
 include_recipe 'private-chef::config'
-=======
-file '/tmp/first_time_internal_elasticsearch_install' do
-  node.default['private_chef']['opscode-solr4']['enable'] = false
-  node.default['private_chef']['elasticsearch']['first_internal_install'] = true
+# this implies it is the firsttime elasticsearch is being installed internally.
+# do not enable opscode-solr4 and rabbitmq services
+# TODO: (prajakta) delete the runsv files for opscode-solr4 and rabbitmq if they exist
+directory '/opt/opscode/sv/opscode-solr4' do
+  recursive true
   action :delete
+  only_if { File.exist?('/tmp/first_time_internal_elasticsearch_install') }
 end
 
-include_recipe "private-chef::plugin_discovery"
-include_recipe "private-chef::plugin_config_extensions"
-include_recipe "private-chef::config"
->>>>>>> install path
+directory '/opt/opscode/sv/rabbitmq' do
+  recursive true
+  action :delete
+  only_if { File.exist?('/tmp/first_time_internal_elasticsearch_install') }
+end
+
+file '/tmp/first_time_internal_elasticsearch_install' do
+  node.override['private_chef']['opscode-solr4']['enable'] = false
+  node.override['private_chef']['rabbitmq']['enable'] = false
+  node.override['private_chef']['elasticsearch']['first_internal_install'] = true
+  action :delete
+end
 
 if node['private_chef']['fips_enabled']
   include_recipe 'private-chef::fips'
