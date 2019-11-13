@@ -33,6 +33,7 @@ EOU
 end
 
 partybus_action = ARGV[0]
+log(partybus_action)
 
 def load_current_migration_state
   Partybus::MigrationState.new(Partybus.config.migration_state_file)
