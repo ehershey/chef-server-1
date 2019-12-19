@@ -61,8 +61,7 @@ when 'elasticsearch'
                             "content" => { "type" => "text" }
                           }
                         }
-                      }
-                     })
+                      })
     index_definition(helper.create_elasticsearch_index)
   end
 end
